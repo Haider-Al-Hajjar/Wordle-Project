@@ -2,3 +2,11 @@
     width: 500px;
     margin: auto;
 }
+
+.keyboard {
+    align-items: center;
+}
+
+.key-row {
+    display: flex;
+}

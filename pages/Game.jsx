@@ -19,6 +19,7 @@ function Game() {
                 setDef(newWord[1])
             }}>Get new word</button>
             {word}, {def} */}
+            TEST
             <div className="wordleTable">
                 <button className="b2"></button> <button className="b2"></button> <button className="b2"></button> <button className="b2"></button> <button className="b2"></button> <button className="b2"></button>
                 <br></br>

@@ -1,12 +1,14 @@
 .wordleTable {
     width: 500px;
     margin: auto;
+    background-color: dodgerblue;
 }
 
 .keyboard {
     align-items: center;
+    background-color: rgb(0, 0, 0);
 }
 
-.key-row {
-    display: flex;
+.padding-big {
+    padding: 40px 20px;
 }

@@ -1,0 +1,62 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.welcome {
+  width: 80%;
+  margin: auto
+}
+
+.b1 {
+  font-size: 200%
+}
+
+.b2 {
+  font-size: 175%
+}
+
+.b3 {
+  font-size: 150%
+}
+
+.b4 {
+  font-size: 125%
+}
+
+.black_text {
+  color: black
+}
+
+.green {
+  background-color: rgb(100, 175, 0);
+}
+
+.gray {
+  background-color: gray;
+}

@@ -3,7 +3,6 @@ const randomNumberInRange = (min, max) => {
         * (max - min + 1)) + min;
 }
 function Wordbank() {
-    const entryNumber = randomNumberInRange(1, 108)
     const words = [
         "Abide", "Banal", "Canny", "Decry", "Ebull", "Fable", "Gabby", "Habit", "Icily", "Jaded",
         "Karma", "Latch", "Mirth", "Nadir", "Oasis", "Piety", "Quell", "Rigor", "Sable", "Tardy",
@@ -43,6 +42,7 @@ function Wordbank() {
         "a short period devoted to indulging in an activity to excess", "to feel a powerful desire for something", "to get rid of", "make (someone) ecstatically happy",
         "a facial expression indicating displeasure or concentration", "a fiercely glowing or glaring look"
     ]
+    const entryNumber = randomNumberInRange(1, words.length)
     return (
         [words[entryNumber], definitions[entryNumber]]
     )

@@ -1,5 +1,5 @@
 .wordleTable {
-    width: 500px;
+    width: 440px;
     margin: auto;
     background-color: dodgerblue;
 }
@@ -19,4 +19,9 @@
     min-width: 60px;
     min-height: 40px;
     margin: auto 10px;
+    min-height: 45px;
+}
+
+.rowBox {
+    padding: 10px 0;
 }

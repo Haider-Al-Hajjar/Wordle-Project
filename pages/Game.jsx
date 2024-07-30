@@ -85,19 +85,19 @@ function Game() {
                     {row != 0 ? <Row word={guess[0]} answer={word} key={letter.id} /> : <Row word={activeWord} key={letter.id} />} {/*Wordle row. Starts empty, fills on guess.*/}
                 </div>
                 <div className="row">
-                    {row != 1 ? <Row word={guess[1]} key={letter.id} /> : <Row word={activeWord} key={letter.id} />}
+                    {row != 1 ? <Row word={guess[1]} answer={word} key={letter.id} /> : <Row word={activeWord} key={letter.id} />}
                 </div>
                 <div className="row">
-                    {row != 2 ? <Row word={guess[2]} key={letter.id} /> : <Row word={activeWord} key={letter.id} />}
+                    {row != 2 ? <Row word={guess[2]} answer={word} key={letter.id} /> : <Row word={activeWord} key={letter.id} />}
                 </div>
                 <div className="row">
-                    {row != 3 ? <Row word={guess[3]} key={letter.id} /> : <Row word={activeWord} key={letter.id} />}
+                    {row != 3 ? <Row word={guess[3]} answer={word} key={letter.id} /> : <Row word={activeWord} key={letter.id} />}
                 </div>
                 <div className="row">
-                    {row != 4 ? <Row word={guess[4]} key={letter.id} /> : <Row word={activeWord} key={letter.id} />}
+                    {row != 4 ? <Row word={guess[4]} answer={word} key={letter.id} /> : <Row word={activeWord} key={letter.id} />}
                 </div>
                 <div className="row">
-                    {row != 5 ? <Row word={guess[5]} key={letter.id} /> : <Row word={activeWord} key={letter.id} />}
+                    {row != 5 ? <Row word={guess[5]} answer={word} key={letter.id} /> : <Row word={activeWord} key={letter.id} />}
                 </div>
 
             </div>

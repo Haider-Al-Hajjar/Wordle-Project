@@ -10,74 +10,65 @@ function Game() {
         const wordBank = Wordbank()
         return (wordBank)
     }
-    // !!! ACTION REQUIRED !!!
-    // this needs to be reworked
-    function type(input) {
-        setActiveWord(input)
-        if ((letter <= 4)) {
-            if ((row <= 5)) {
-                if (lastPressed == "delete") {
-                    grid[row][letter + 1] = input
-                }
-                else {
-                    grid[row][letter] = input
-                }
-                setLastPressed("letter")
-                if (letter <= 4) {
-                    if (lastPressed == "delete") {
-                        setLetter(letter + 2)
-                    }
-                    else {
-                        setLetter(letter + 1)
-                    }
-                }
+
+    function type(input) { // Types a character
+        console.log(activeWord)
+        if (row <= 5) {
+            if (letter <= 4) {
+                setActiveWord(activeWord + input)
+                setLetter(letter + 1)
             }
             else {
-                console.log(row)
-                alert("You have already made 6 guesses, the game is over.")
+                alert("You ahve already typed 5 letters. Hit delete to change your answer")
             }
         }
         else {
-            alert("You ahve already typed 5 letters. Hit delete to change your answer")
+            alert("You have already made six guesses. The game is over.")
         }
     }
-    // !!! ACTION REQUIRED !!!
-    // this needs to be reworked
+
     function backspace() {
         console.log(letter)
-        if (letter == 5) {
-            setLetter(letter - 2)
-            grid[row][4] = ""
-            setLastPressed("delete")
+        if (row <= 5) {
+            if (letter != 0) {
+                setLetter(letter - 1)
+                setActiveWord(activeWord.substring(0, activeWord.length - 1))
+                setLastPressed("delete")
+            }
         }
         else {
-            if (lastPressed == "delete") {
-                if (letter >= 0) {
-                    setLetter(letter - 1)
-                } grid[row][letter] = ""
-            }
-            else if (lastPressed == "letter") {
-                grid[row][letter - 1] = ""
-                setLastPressed("delete")
-                setLetter(letter - 2)
-            }
-            else {
-                grid[row][letter] = ""
-                setLastPressed("delete")
-            }
+            alert("You have already made six guesses. The game is over.")
         }
     }
-    // !!! ACTION REQUIRED !!!
-    // enter function does not work currently
+
     function enter() {
-        guess[row] = "fire" + row
-        setRow(row + 1)
+        if (letter < 5) {
+            alert("You have not typed out five letters.")
+        }
+        else {
+            if (row == 0) {
+                setGuess([activeWord])
+            }
+            else {
+                setGuess([...guess, activeWord])
+            }
+            console.log(guess, row)
+            if (row <= 5) {
+                setActiveWord("")
+                setLetter(0)
+                setRow(row + 1)
+            }
+            else {
+                alert("You have made six guesses. The game is now over.")
+            }
+        }
+        console.log(guess)
     }
     const navigate = useNavigate()
 
     const [word, setWord] = useState(getNewWord()[0]), [def, setDef] = useState()
     const [row, setRow] = useState(0), [letter, setLetter] = useState(0)
-    const [guess, setGuess] = useState(["", "", "", "", "", ""]) // When someone enters a guess, it goes here.
+    const [guess, setGuess] = useState(["", "", "", "", "", ""])  // When someone enters a guess, it goes here.
     const [activeWord, setActiveWord] = useState("") // If somebody be typing, this is where it'll go
     const [lastPressed, setLastPressed] = useState(false) // this may be deprecated
     return (
@@ -108,6 +99,7 @@ function Game() {
                 <div className="row">
                     {row != 5 ? <Row word={guess[5]} key={letter.id} /> : <Row word={activeWord} key={letter.id} />}
                 </div>
+
             </div>
             <br></br>
             <br></br>
@@ -150,6 +142,7 @@ function Game() {
                     <button onClick={() => type("Z")}>Z</button>
                     <button onClick={() => backspace()}>Del</button>
                 </div>
+                <button onClick={() => { console.log(row, letter) }}> row letter</button>
             </div>
         </>
     )

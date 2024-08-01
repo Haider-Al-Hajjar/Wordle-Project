@@ -9,20 +9,25 @@ import GameOptions from "../Components/GameOptions"
 function Game() {
     // Functions
     // Relating to the typed word.
-    function getNewWord() { // Fetches answer from wordbank.
-        const wordBank = Wordbank()
-
-        // !!!ACTION REQUIRED!!!
-        // just have to get this thing not to break when hardMode is called before it's initialized.
-        // if (hardMode) {
-        //     const randomNumberInRange = (min, max) => {
-        //         return Math.floor(Math.random()
-        //             * (max - min + 1)) + min;
-        //     }
-        //     return (failedWords[randomNumberInRange(1, failedWords.length)])
-
-        // }
-        return (wordBank)
+    function getNewWord(hardMode) { // Fetches answer from wordbank.
+        if (!hardMode) {
+            const wordBank = Wordbank()
+            initialRun = false
+            return (wordBank)
+        }
+        else {
+            let randomNumber = Math.floor(Math.random() * (failedWords.length - 1 + 1))
+            //(min, max) => {
+            //    return Math.floor(Math.random()    * (max - min + 1)) + min;
+            console.log(hardMode)
+            console.log(failedWords)
+            console.log(Math.random() * (failedWords.length))
+            console.log(failedWords.length)
+            console.log(Math.floor(Math.random() * (failedWords.length)))
+            console.log(failedWords[randomNumber])
+            console.log(randomNumber)
+            return ([failedWords[randomNumber]])
+        }
     }
 
     function type(input) { // Types a character
@@ -122,7 +127,7 @@ function Game() {
 
 
     function newGame() {
-        initialWord = getNewWord()
+        initialWord = getNewWord(hardMode)
         setWord(initialWord[0])
         setDef(initialWord[1])
         setRow(0)
@@ -156,6 +161,7 @@ function Game() {
     //
     // Variables
     // Variables relating to the typed word
+    let initialRun = true
     let initialWord = getNewWord()
     const [word, setWord] = useState(initialWord[0]), [def, setDef] = useState(initialWord[1])
     const [row, setRow] = useState(0), [letter, setLetter] = useState(0)
@@ -188,7 +194,8 @@ function Game() {
             }}>Current word: {word.toUpperCase()}</button>
 
             <div className="wordleTable padding-big"> {/*Wordle Table*/}
-                <p className="title">Current Score: {row} </p>
+                <p className="title">Current Streak: {streak} </p>
+                <p className="title">Current Guess: {row} </p>
                 <p className="subtitle">Lower scores are better!</p>
                 <div className="row">
                     {row != 0 ? <Row id={0} word={guess[0]} checkCorrect={checkCorrect} answer={word} key={row} /> : <Row word={activeWord} key={row} />} {/*Wordle row. Starts empty, fills on guess.*/}

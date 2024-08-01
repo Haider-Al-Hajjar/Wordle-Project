@@ -63,11 +63,11 @@ function GameOptions(props) {
                     )
                 }) : null}
             </p>
-            <button onClick={() => { props.newGame() }} style={{ marginRight: 40 }}>
+            <button onClick={() => { props.newGame(props.hardMode) }} style={{ marginRight: 40 }}>
                 New Game?
             </button>
             <button onClick={() => { toggleHardMode() }}>
-                Restrict wordbank to {props.hardMode ? "Hard words" : "All Words"}?
+                Restrict wordbank to {!(props.hardMode) ? "Hard words" : "All Words"}?
             </button>
             <br />
             <i>Hard words are words you have previously failed</i>

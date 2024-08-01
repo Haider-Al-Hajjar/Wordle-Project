@@ -4,46 +4,65 @@ import Wordbank from "../Components/Wordbank"
 import '../src/App.css'
 import '../src/Game.css'
 import Row from "../Components/Row"
+import GameOptions from "../Components/GameOptions"
 
 function Game() {
-    function getNewWord() { // Fetches from wordbank.
+    // Functions
+    // Relating to the typed word.
+    function getNewWord() { // Fetches answer from wordbank.
         const wordBank = Wordbank()
+
+        // !!!ACTION REQUIRED!!!
+        // just have to get this thing not to break when hardMode is called before it's initialized.
+        // if (hardMode) {
+        //     const randomNumberInRange = (min, max) => {
+        //         return Math.floor(Math.random()
+        //             * (max - min + 1)) + min;
+        //     }
+        //     return (failedWords[randomNumberInRange(1, failedWords.length)])
+
+        // }
         return (wordBank)
     }
 
     function type(input) { // Types a character
-        console.log(activeWord)
-        if (row <= 5) {
+        if (gameOver) {
+            alert("Alas, my friend, you have already made six guesses. Next time, you've got this.")
+        }
+        else if (row <= 5) {
             if (letter <= 4) {
                 setActiveWord(activeWord + input)
                 setLetter(letter + 1)
             }
             else {
-                alert("You ahve already typed 5 letters. Hit delete to change your answer")
+                alert("You have already typed 5 letters. Hit delete to change your answer")
             }
         }
-        else {
-            alert("You have already made six guesses. The game is over.")
+        else if (correct) {
+            alert("You already won! Hit new game to try again.")
         }
     }
 
-    function backspace() {
-        console.log(letter)
-        if (row <= 5) {
+    function backspace() { // Deletes a character.
+        if (gameOver) {
+            alert("Alas, my friend, you have already made six guesses. Next time, you've got this.")
+        }
+        else if (row <= 5) {
             if (letter != 0) {
                 setLetter(letter - 1)
                 setActiveWord(activeWord.substring(0, activeWord.length - 1))
-                setLastPressed("delete")
             }
         }
-        else {
-            alert("You have already made six guesses. The game is over.")
-        }
     }
-
-    function enter() {
-        if (letter < 5) {
+    // Relating to progression
+    function enter() { // Submits a word
+        if (gameOver) {
+            alert("Alas, my friend, that was your sixth and final guess. Next time, you've got this.")
+            return
+        }
+        else if (letter < 5) {
             alert("You have not typed out five letters.")
+            return
         }
         else {
             if (row == 0) {
@@ -52,27 +71,115 @@ function Game() {
             else {
                 setGuess([...guess, activeWord])
             }
-            console.log(guess, row)
             if (row <= 5) {
                 setActiveWord("")
                 setLetter(0)
                 setRow(row + 1)
             }
-            else {
-                alert("You have made six guesses. The game is now over.")
+            else if (correct) {
+                alert("You already won! Hit new game to play agian.")
+                return
             }
         }
-        console.log(guess)
+        let guessLetters = activeWord.split('')
+        let ansLetters = word.toUpperCase().split('')
+        let matches = 0
+        for (let i = 0; i < guessLetters.length; i++) {
+            if (ansLetters[i] == guessLetters[i]) {
+                matches++
+            }
+        }
+        if (matches == 5) {
+            if (row == 1) {
+                alert("Congratulations, you won in " + (row + 1) + " guess!")
+            }
+            else {
+                alert("Congratulations, you won in " + (row + 1) + " guesses!")
+            }
+            setScores(scores.map((scores, index) => {
+                if (index == row) {
+                    return (scores + 1)
+                }
+                else {
+                    return (scores)
+                }
+            }))
+            setStreak(streak + 1)
+        }
+        else if (row >= 5) {
+            alert("Alas, my friend, you have already made six guesses. Next time, you've got this.")
+            setGameOver(true)
+            setFailedWords([...failedWords, word])
+            console.log(failedWords, "Failed words here")
+            setStreak(0)
+        }
     }
-    const navigate = useNavigate()
 
-    const [word, setWord] = useState(getNewWord()[0]), [def, setDef] = useState()
+    function checkCorrect(validity) {// Checks the submissions's validity
+        setCorrect(validity)
+    }
+
+
+
+    function newGame() {
+        initialWord = getNewWord()
+        setWord(initialWord[0])
+        setDef(initialWord[1])
+        setRow(0)
+        setLetter(0)
+        setGuess(["", "", "", "", "", ""])
+        setCorrect(false)
+        setActiveWord("")
+        setGameOver(false)
+        setHint(false)
+    }
+
+    function toggleHint() {// Shows/hides the hint
+        if (!hint) {
+            setHint(true)
+        }
+        else {
+            setHint(false)
+        }
+    }
+
+    function toggleSettings() {// Shows/hides the Settings
+        if (!showSettings) {
+            setShowSettings(true)
+        }
+        else {
+            setShowSettings(false)
+        }
+    }
+
+    const navigate = useNavigate()
+    //
+    // Variables
+    // Variables relating to the typed word
+    let initialWord = getNewWord()
+    const [word, setWord] = useState(initialWord[0]), [def, setDef] = useState(initialWord[1])
     const [row, setRow] = useState(0), [letter, setLetter] = useState(0)
     const [guess, setGuess] = useState(["", "", "", "", "", ""])  // When someone enters a guess, it goes here.
+    const [correct, setCorrect] = useState(false)
     const [activeWord, setActiveWord] = useState("") // If somebody be typing, this is where it'll go
-    const [lastPressed, setLastPressed] = useState(false) // this may be deprecated
+    // Variables relating to progress
+    const [gameOver, setGameOver] = useState(false)
+    const [streak, setStreak] = useState(0)
+    const [scores, setScores] = useState([0, 0, 0, 0, 0, 0])
+    const [failedWords, setFailedWords] = useState([])
+    //Variables related to showing things.
+    const [hint, setHint] = useState(false)
+    const [showSettings, setShowSettings] = useState(false)
+    const [hardMode, setHardMode] = useState(false)
     return (
         <>
+            <button onClick={() => {
+                console.log(scores)
+                toggleSettings(showSettings)
+            }} style={{
+                position: "fixed", top: 0, right: 0, paddingTop: 10, paddingBottom: 10
+            }}> ⚙️</button>
+            {showSettings ? <GameOptions scores={scores} newGame={newGame} hardMode={hardMode} setHardMode={setHardMode} /> : null}
             <button onClick={() => { // Summons a new word.
                 let newWord = getNewWord()
                 newWord[0] = newWord[0].toUpperCase()
@@ -81,65 +188,81 @@ function Game() {
             }}>Current word: {word.toUpperCase()}</button>
 
             <div className="wordleTable padding-big"> {/*Wordle Table*/}
+                <p className="title">Current Score: {row} </p>
+                <p className="subtitle">Lower scores are better!</p>
                 <div className="row">
-                    {row != 0 ? <Row word={guess[0]} answer={word} key={letter.id} /> : <Row word={activeWord} key={letter.id} />} {/*Wordle row. Starts empty, fills on guess.*/}
+                    {row != 0 ? <Row id={0} word={guess[0]} checkCorrect={checkCorrect} answer={word} key={row} /> : <Row word={activeWord} key={row} />} {/*Wordle row. Starts empty, fills on guess.*/}
                 </div>
                 <div className="row">
-                    {row != 1 ? <Row word={guess[1]} answer={word} key={letter.id} /> : <Row word={activeWord} key={letter.id} />}
+                    {row != 1 ? <Row id={1} word={guess[1]} checkCorrect={checkCorrect} answer={word} key={row} /> : <Row word={activeWord} key={row} />}
                 </div>
                 <div className="row">
-                    {row != 2 ? <Row word={guess[2]} answer={word} key={letter.id} /> : <Row word={activeWord} key={letter.id} />}
+                    {row != 2 ? <Row id={2} word={guess[2]} checkCorrect={checkCorrect} answer={word} key={row} /> : <Row word={activeWord} key={row} />}
                 </div>
                 <div className="row">
-                    {row != 3 ? <Row word={guess[3]} answer={word} key={letter.id} /> : <Row word={activeWord} key={letter.id} />}
+                    {row != 3 ? <Row id={3} word={guess[3]} checkCorrect={checkCorrect} answer={word} key={row} /> : <Row word={activeWord} key={row} />}
                 </div>
                 <div className="row">
-                    {row != 4 ? <Row word={guess[4]} answer={word} key={letter.id} /> : <Row word={activeWord} key={letter.id} />}
+                    {row != 4 ? <Row id={4} word={guess[4]} checkCorrect={checkCorrect} answer={word} key={row} /> : <Row word={activeWord} key={row} />}
                 </div>
                 <div className="row">
-                    {row != 5 ? <Row word={guess[5]} answer={word} key={letter.id} /> : <Row word={activeWord} key={letter.id} />}
+                    {row != 5 ? <Row id={5} word={guess[5]} checkCorrect={checkCorrect} answer={word} key={row} /> : <Row word={activeWord} key={row} />}
                 </div>
-
+                {(gameOver || correct) ? <button onClick={() => {
+                    newGame()
+                }}> New game? </button> : null}
             </div>
             <br></br>
+            {row >= 3 ?
+                <button onClick={() => toggleHint()} >
+                    Click to toggle hint.
+                    <br></br>
+                    {hint ? def : null}
+                </button >
+                : null
+            }
             <br></br>
-            <button onClick={() => setWord("FIRES")}>Set word to "Fires"</button>
+            <button onClick={() => setWord("Error")}>Set word to "Error"</button>
+            <p>Scores: {scores}</p>
+            <button onClick={() => (setRow(row + 1))}>Increment row: {row}</button>
+            <button onClick={() => (setLetter(5))}>Set Letter to 5: {letter}</button>
+
             <br></br>
             <div className="keyboard padding-big">
                 <div className="key-row"> {/*keyboard!*/}
-                    <button onClick={() => type("A")}>A</button>
-                    <button onClick={() => type("B")}>B</button>
-                    <button onClick={() => type("C")}>C</button>
-                    <button onClick={() => type("D")}>D</button>
+                    <button onClick={() => type("Q")}>Q</button>
+                    <button onClick={() => type("W")}>W</button>
                     <button onClick={() => type("E")}>E</button>
-                    <button onClick={() => type("F")}>F</button>
-                    <button onClick={() => type("G")}>G</button>
-                    <button onClick={() => type("H")}>H</button>
+                    <button onClick={() => type("R")}>R</button>
+                    <button onClick={() => type("T")}>T</button>
+                    <button onClick={() => type("Y")}>Y</button>
+                    <button onClick={() => type("U")}>U</button>
                     <button onClick={() => type("I")}>I</button>
-                    <button onClick={() => type("J")}>J</button>
+                    <button onClick={() => type("O")}>O</button>
+                    <button onClick={() => type("P")}>P</button>
                 </div>
                 <br></br>
                 <div className="key-row">
+                    <button onClick={() => type("A")}>A</button>
+                    <button onClick={() => type("S")}>S</button>
+                    <button onClick={() => type("D")}>D</button>
+                    <button onClick={() => type("F")}>F</button>
+                    <button onClick={() => type("G")}>G</button>
+                    <button onClick={() => type("H")}>H</button>
+                    <button onClick={() => type("J")}>J</button>
                     <button onClick={() => type("K")}>K</button>
                     <button onClick={() => type("L")}>L</button>
-                    <button onClick={() => type("M")}>M</button>
-                    <button onClick={() => type("N")}>N</button>
-                    <button onClick={() => type("O")}>O</button>
-                    <button onClick={() => type("P")}>P</button>
-                    <button onClick={() => type("Q")}>Q</button>
-                    <button onClick={() => type("R")}>R</button>
-                    <button onClick={() => type("S")}>S</button>
                 </div>
                 <br></br>
                 <div className="key-row">
                     <button onClick={() => enter()}>Ent</button>
-                    <button onClick={() => type("T")}>T</button>
-                    <button onClick={() => type("U")}>U</button>
-                    <button onClick={() => type("V")}>V</button>
-                    <button onClick={() => type("W")}>W</button>
-                    <button onClick={() => type("X")}>X</button>
-                    <button onClick={() => type("Y")}>Y</button>
                     <button onClick={() => type("Z")}>Z</button>
+                    <button onClick={() => type("X")}>X</button>
+                    <button onClick={() => type("C")}>C</button>
+                    <button onClick={() => type("V")}>V</button>
+                    <button onClick={() => type("B")}>B</button>
+                    <button onClick={() => type("N")}>N</button>
+                    <button onClick={() => type("M")}>M</button>
                     <button onClick={() => backspace()}>Del</button>
                 </div>
                 <button onClick={() => { console.log(row, letter) }}> row letter</button>

@@ -25,3 +25,28 @@
 .rowBox {
     padding: 10px 0;
 }
+
+.green {
+    background-color: chartreuse;
+}
+
+.yellow {
+    background-color: burlywood;
+}
+
+.gray {
+    background-color: dimgrey;
+}
+
+.title {
+    font-weight: bolder;
+    font-size: 120%;
+    margin-top: -15px;
+}
+
+.subtitle {
+    size: 80%;
+    font-style: italic;
+    margin-top: -20px;
+    color: black
+}

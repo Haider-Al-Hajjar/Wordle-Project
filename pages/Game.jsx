@@ -19,13 +19,7 @@ function Game() {
             let randomNumber = Math.floor(Math.random() * (failedWords.length - 1 + 1))
             //(min, max) => {
             //    return Math.floor(Math.random()    * (max - min + 1)) + min;
-            console.log(hardMode)
-            console.log(failedWords)
-            console.log(Math.random() * (failedWords.length))
-            console.log(failedWords.length)
-            console.log(Math.floor(Math.random() * (failedWords.length)))
-            console.log(failedWords[randomNumber])
-            console.log(randomNumber)
+
             return ([failedWords[randomNumber]])
         }
     }
@@ -115,7 +109,6 @@ function Game() {
             alert("Alas, my friend, you have already made six guesses. Next time, you've got this.")
             setGameOver(true)
             setFailedWords([...failedWords, word])
-            console.log(failedWords, "Failed words here")
             setStreak(0)
         }
     }
@@ -177,10 +170,11 @@ function Game() {
     const [hint, setHint] = useState(false)
     const [showSettings, setShowSettings] = useState(false)
     const [hardMode, setHardMode] = useState(false)
+    const [showGearTip, setShowGearTip] = useState(true)
     return (
         <>
+
             <button onClick={() => {
-                console.log(scores)
                 toggleSettings(showSettings)
             }} style={{
                 position: "fixed", top: 0, right: 0, paddingTop: 10, paddingBottom: 10
@@ -197,6 +191,7 @@ function Game() {
                 <p className="title">Current Streak: {streak} </p>
                 <p className="title">Current Guess: {row} </p>
                 <p className="subtitle">Lower scores are better!</p>
+                <h3 >{!gameOver ? null : <>The word was: {word}</>}</h3>
                 <div className="row">
                     {row != 0 ? <Row id={0} word={guess[0]} checkCorrect={checkCorrect} answer={word} key={row} /> : <Row word={activeWord} key={row} />} {/*Wordle row. Starts empty, fills on guess.*/}
                 </div>
@@ -219,8 +214,7 @@ function Game() {
                     newGame()
                 }}> New game? </button> : null}
             </div>
-            <br></br>
-            {row >= 3 ?
+            {row >= 3 && !hardMode ?
                 <button onClick={() => toggleHint()} >
                     Click to toggle hint.
                     <br></br>
@@ -228,13 +222,11 @@ function Game() {
                 </button >
                 : null
             }
-            <br></br>
             <button onClick={() => setWord("Error")}>Set word to "Error"</button>
-            <p>Scores: {scores}</p>
             <button onClick={() => (setRow(row + 1))}>Increment row: {row}</button>
             <button onClick={() => (setLetter(5))}>Set Letter to 5: {letter}</button>
+            {showGearTip ? <p style={{ padding: 20 }} onClick={() => { setShowGearTip(false) }}>Hit the gear icon in the top right corner to see your scores, and to change the game mode! (Click to dismiss) </p> : <> <br /> <br /></>}
 
-            <br></br>
             <div className="keyboard padding-big">
                 <div className="key-row"> {/*keyboard!*/}
                     <button onClick={() => type("Q")}>Q</button>
@@ -262,7 +254,7 @@ function Game() {
                 </div>
                 <br></br>
                 <div className="key-row">
-                    <button onClick={() => enter()}>Ent</button>
+                    <button style={{ backgroundColor: "darkgreen" }} onClick={() => enter()}>Ent</button>
                     <button onClick={() => type("Z")}>Z</button>
                     <button onClick={() => type("X")}>X</button>
                     <button onClick={() => type("C")}>C</button>
@@ -270,9 +262,8 @@ function Game() {
                     <button onClick={() => type("B")}>B</button>
                     <button onClick={() => type("N")}>N</button>
                     <button onClick={() => type("M")}>M</button>
-                    <button onClick={() => backspace()}>Del</button>
+                    <button style={{ backgroundColor: "darkred" }} onClick={() => backspace()}>Del</button>
                 </div>
-                <button onClick={() => { console.log(row, letter) }}> row letter</button>
             </div>
         </>
     )

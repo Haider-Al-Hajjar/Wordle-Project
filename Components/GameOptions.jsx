@@ -5,8 +5,8 @@ function GameOptions(props) {
     let sum = props.scores.reduce((total, score) => {
         return (total + score)
     })
+    console.log(sum, props.scores)
     let percents = props.scores.map((score, index) => {
-        console.log(score / sum)
         if (score != 0) {
             return (
                 Math.round(score / sum * 100)
@@ -56,7 +56,7 @@ function GameOptions(props) {
                         <h3 style={{ display: "container", alignItems: "center", margin: 10, fontsize: "18px" }}>{index + 1}</h3>
                         <div style={Parentdiv}>
                             <div style={Childdiv}>
-                                <span style={progresstext}>{`${bar}%`}</span>
+                                <span style={progresstext}>{`${bar}%`} {Math.round(percents[index] * sum / 100) != 0 ? <>| {Math.round(percents[index] * sum / 100)}</> : null}</span>
                             </div>
                         </div>
                     </div>
@@ -67,10 +67,10 @@ function GameOptions(props) {
                 New Game?
             </button>
             <button onClick={() => { toggleHardMode() }}>
-                Restrict wordbank to {!(props.hardMode) ? "Hard words" : "All Words"}?
+                Restrict wordbank to {!(props.hardMode) ? "Hard Words" : "All Words"}?
             </button>
             <br />
-            <i>Hard words are words you have previously failed</i>
+            <i>Hard words are words you have previously failed. You will not receive hints while this is active</i>
         </div>
     )
 }

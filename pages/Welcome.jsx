@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import '../src/App.css'
 import { useNavigate } from 'react-router-dom'
+import GameOptions from '../Components/GameOptions';
 
 function Welcome() {
     const navigate = useNavigate();
